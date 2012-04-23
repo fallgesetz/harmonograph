@@ -1,0 +1,9 @@
+Harmonographs are cool!
+
+Copyright Leah Xue 2012
+
+Installation Notes
+
+1. virtualenv .
+2  source bin/activate
+2. pip install -r requirements.txt
