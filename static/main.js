@@ -11,24 +11,35 @@ window.onload = function () {
         for (var i = 1; i < path.length; i++)
         {
             coord = path[i];
-            console.log(path);
             x = coord[0];
             y = coord[1];
             ctx.lineTo(x,y);
-            console.log(x + "..." + y);
         }
         ctx.closePath();
         ctx.stroke();
-    }
+    }	
 
-    function parabola(scale, x_intercept, y_intercept)
-    {
-    }
 
-    function ellipse(A, B, k, x_0, y_0)
+    function draw_frame(ctx, path, fps, total) {
+        function frame_rate_to_delay(fps) {
+            return 60/fps * 1000;
+        }
+
+        function fractional_path(path, fraction) {
+            var n = Math.round(fraction * path.length);
+            return path.slice(0, n);
+            }
+        var seconds_delay = frame_rate_to_delay(fps);
+        for(var i = seconds_delay; i < total; i += seconds_delay) {
+            console.log(i);
+            setInterval(draw_path, seconds_delay, ctx, fractional_path(path, i/total));
+            }
+        }
+
+    function ellipse(A, B, k, x_0, y_0, complete)
     {
-        points = []
-        for ( var t = 0; t < 2*Math.PI; t += STEP_SIZE) {
+        var points = [];
+        for ( var t = 0; t < complete*2*Math.PI; t += STEP_SIZE) {
             x = A * Math.cos(k*t) + x_0;
             y = B * Math.sin(k*t) + y_0;
             points.push([x,y]);
@@ -38,8 +49,10 @@ window.onload = function () {
 
     function lissajous_curve(A, B, k1, k2, l1, l2, x_0, y_0, complete)
     {
-        points = []
-        for ( var t = 0; t < complete*Math.PI; t += STEP_SIZE) {
+        points = [];
+	l1 = l1 * Math.random();
+	l2 = l2 * Math.random();
+        for ( var t = 0; t < complete*2*Math.PI; t += STEP_SIZE) {
             x = A * Math.cos(k1*t + l1) + x_0;
             y = B * Math.sin(k2*t + l2) + y_0;
             points.push([x,y]);
@@ -47,5 +60,6 @@ window.onload = function () {
         return points;
     }
 
-    draw_path(context, lissajous_curve(30, 30, 5, 9, 0, 0, 100, 100, 4));
+    l_path = lissajous_curve(200, 200, 150, 50, 0.5, 0.5, 300, 300, 1);
+    draw_frame(context, l_path, 24, 60000);
 };
