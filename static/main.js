@@ -5,6 +5,9 @@ window.onload = function () {
 
     function draw_path(ctx, path)
     {
+        console.log(path.length);
+        ctx.save();
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.beginPath();
         ctx.lineWidth = 1;
         ctx.moveTo(path[0][0], path[0][1]);
@@ -17,24 +20,20 @@ window.onload = function () {
         }
         ctx.closePath();
         ctx.stroke();
+        ctx.restore();
+    }
+    
+    
+    function tween_path(ctx, path, fps, total) {
+    	var seconds_delay = Math.round(1000/fps);
+        console.log(seconds_delay);
+    	for(var i = 0; i < total; i += seconds_delay) {
+            var begin = Math.round(i/total * path.length);
+            var cur_path = path.slice(0, begin);
+            window.setTimeout(function(cur_path, ctx) { return function() {draw_path(ctx, cur_path);}}(cur_path, ctx), i);	
+    	}
     }	
-
-
-    function draw_frame(ctx, path, fps, total) {
-        function frame_rate_to_delay(fps) {
-            return 60/fps * 1000;
-        }
-
-        function fractional_path(path, fraction) {
-            var n = Math.round(fraction * path.length);
-            return path.slice(0, n);
-            }
-        var seconds_delay = frame_rate_to_delay(fps);
-        for(var i = seconds_delay; i < total; i += seconds_delay) {
-            console.log(i);
-            setInterval(draw_path, seconds_delay, ctx, fractional_path(path, i/total));
-            }
-        }
+    
 
     function ellipse(A, B, k, x_0, y_0, complete)
     {
@@ -61,5 +60,5 @@ window.onload = function () {
     }
 
     l_path = lissajous_curve(200, 200, 150, 50, 0.5, 0.5, 300, 300, 1);
-    draw_frame(context, l_path, 24, 60000);
+    tween_path(context, l_path, 24, 12000);
 };
