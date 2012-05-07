@@ -22,18 +22,20 @@ window.onload = function () {
         ctx.stroke();
         ctx.restore();
     }
-    
-    
+
     function tween_path(ctx, path, fps, total) {
     	var seconds_delay = Math.round(1000/fps);
         console.log(seconds_delay);
     	for(var i = 0; i < total; i += seconds_delay) {
             var begin = Math.round(i/total * path.length);
             var cur_path = path.slice(0, begin);
-            window.setTimeout(function(cur_path, ctx) { return function() {draw_path(ctx, cur_path);}}(cur_path, ctx), i);	
+            window.setTimeout(function(cur_path, ctx) { 
+                return function() {
+                    draw_path(ctx, cur_path);
+                };
+            }(cur_path, ctx), i);
     	}
-    }	
-    
+    }
 
     function ellipse(A, B, k, x_0, y_0, complete)
     {
@@ -57,6 +59,17 @@ window.onload = function () {
             points.push([x,y]);
         }
         return points;
+    }
+
+    function input_polar_curve_to_path(x_str, y_str)
+    {
+	var points = [];
+	for (var t = 0; t < 2*Math.PI; t += step_size)
+	{
+		x = eval(x_str);
+		y = eval(y_str);
+	}
+	return points;
     }
 
     l_path = lissajous_curve(200, 200, 150, 50, 0.5, 0.5, 300, 300, 1);
