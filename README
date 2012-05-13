@@ -1,11 +1,15 @@
 Harmonographs are cool!
 
 
-Copyright Leah Xue 2012
-
 Installation Notes
 
 1. virtualenv .
 2  source bin/activate
 3. pip install -r requirements.txt
 4. gunicorn server:app
+
+Logic:
+
+Based on the description given here, http://www.karlsims.com/harmonograph/index.html, we can derive the equation of a harmonograph, and then we can plot it in canvas. Easy!
+
+Ok, 
